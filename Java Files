@@ -1,0 +1,40 @@
+Member Service
+MemberService.java
+package com.gamerentalclub.services;
+
+import com.gamerentalclub.models.Member;
+import com.gamerentalclub.database.DatabaseConnection;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class MemberService {
+    public void addMember(Member member) {
+        String query = "INSERT INTO members (id, name) VALUES (?, ?)";
+        try (Connection conn = DatabaseConnection.connect();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, member.getId());
+            stmt.setString(2, member.getName());
+            stmt.executeUpdate();
+            System.out.println("Member added successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error adding member: " + e.getMessage());
+        }
+    }
+
+    public List<Member> listMembers() {
+        List<Member> members = new ArrayList<>();
+        String query = "SELECT * FROM members";
+        try (Connection conn = DatabaseConnection.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                members.add(new Member(rs.getInt("id"), rs.getString("name")));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching members: " + e.getMessage());
+        }
+        return members;
+    }
+}
