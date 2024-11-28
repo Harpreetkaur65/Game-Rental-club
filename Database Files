@@ -1,0 +1,20 @@
+CREATE TABLE games (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    genre TEXT NOT NULL,
+    quantity INTEGER NOT NULL
+);
+
+CREATE TABLE members (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE rentals (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    member_id INTEGER NOT NULL,
+    game_id INTEGER NOT NULL,
+    rental_date TEXT NOT NULL,
+    FOREIGN KEY (member_id) REFERENCES members(id),
+    FOREIGN KEY (game_id) REFERENCES games(id)
+);
